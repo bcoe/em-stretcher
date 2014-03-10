@@ -1,3 +1,4 @@
+# Patch get to play nicely with EM.
 module Stretcher
   # Represents an index  scoped to a specific type.
   # Generally should be instantiated via Index#type(name).
