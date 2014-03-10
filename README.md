@@ -1,6 +1,6 @@
 # Em::Stretcher
 
-TODO: Write a gem description
+An EventMachine port of [Stretcher](https://github.com/PoseBiz/stretcher), a Fast, Elegant, ElasticSearch client
 
 ## Installation
 
