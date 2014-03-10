@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "stretcher"
+  spec.add_dependency "deferrable_gratification"
   spec.add_dependency "eventmachine"
   spec.add_dependency "em-http-request"
 

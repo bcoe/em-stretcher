@@ -1,7 +1,7 @@
 require "rspec"
 require "rspec/em"
 
-require_relative '../lib/stretcher'
+require_relative '../lib/em-stretcher'
 
 TESTING_INDEX_NAME = 'em::stretcher:testing'
 
@@ -44,11 +44,17 @@ end
 
 # async assertions for EventMachine specs.
 DeferrableModule = RSpec::EM.async_steps do
-  def execute(object, method, args = nil, &callback)
+  def execute(object, method, *args, &callback)
     deferrable = if args
-      object.send(method, args)
+      object.send(method, *args)
     else
       object.send(method)
+    end
+
+    # Search results have their deferrable
+    # on the documents key.
+    if deferrable.respond_to?(:documents)
+      deferrable = deferrable.results
     end
 
     deferrable.callback do |result|
@@ -62,12 +68,7 @@ DeferrableModule = RSpec::EM.async_steps do
     end
   end
 
-  def sucess_should_have_key(key, &callback)
-    @success.has_key?(key).should == true
-    @success = nil
-    callback.call
-  end
-
+  # recursively look for a matching key and value in hash.
   def success_key_should_have_value(key, expected, &callback)
     # walk the hash structure.
     key = [*key]
@@ -80,6 +81,14 @@ DeferrableModule = RSpec::EM.async_steps do
     callback.call
   end
 
+  # confirm count of result set.
+  def success_result_count_should_equal(expected, &callback)
+    @success.count.should == expected
+    @success = nil
+    callback.call
+  end
+
+  # look for substring in error http_response.
   def error_response_should_contain(expected, &callback)
     @error.http_response.should =~ /#{expected}/
     @error = nil

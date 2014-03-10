@@ -1,3 +1,5 @@
+# Patch the stretcher server to use
+# deferrables rather than Faraday.
 module EventMachine::Stretcher
   class Server < Stretcher::Server
     # Handy way to query the server, returning *only* the body
@@ -25,6 +27,12 @@ module EventMachine::Stretcher
 
       deferrable = EventMachine::DefaultDeferrable.new
 
+      # Allow the body to be set via a block
+      # es_component.rb in the stretcher library.
+      body_struct = OpenStruct.new
+      yield(body_struct) if block_given?
+      body ||= body_struct.body
+      
       # Update params with GET and POST parameters.
       http_params[:query] = Stretcher::Util.clean_params(params) if params
       http_params[:body] = JSON.dump(body) if body
