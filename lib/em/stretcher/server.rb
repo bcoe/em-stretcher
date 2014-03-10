@@ -63,13 +63,13 @@ module EventMachine::Stretcher
           deferrable.succeed(res.response)
         end
       elsif [404, 410].include? status
-        err_str = "Error processing request: (#{res.status})! #{res.env[:method]} URL: #{res.env[:url]}"
-        err_str << "\n Resp Body: #{res.body}"
-        deferrable.fail(RequestError::NotFound.new(err_str))
+        err_str = "Error processing request: (#{status})! #{res.req.method} URL: #{res.req.uri}"
+        err_str << "\n Resp Body: #{res.response}"
+        deferrable.fail(Stretcher::RequestError::NotFound.new(err_str))
       else
-        err_str = "Error processing request (#{res.status})! #{res.env[:method]} URL: #{res.env[:url]}"
-        err_str << "\n Resp Body: #{res.body}"
-        deferrable.fail(RequestError.new(err_str))
+        err_str = "Error processing request (#{status})! #{res.req.method} URL: #{res.req.uri}"
+        err_str << "\n Resp Body: #{res.response}"
+        deferrable.fail(Stretcher::RequestError.new(err_str))
       end
     end
 

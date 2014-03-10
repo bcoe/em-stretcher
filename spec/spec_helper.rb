@@ -3,10 +3,12 @@ require "rspec/em"
 
 require_relative '../lib/stretcher'
 
+TESTING_INDEX_NAME = 'em::stretcher:testing'
+
 # Helper to reset ElasticSearch index for tests.
 def reset_index
   server = Stretcher::Server.new
-  i = server.index('em::stretcher:testing')
+  i = server.index(TESTING_INDEX_NAME)
   begin
     i.delete
   rescue Stretcher::RequestError::NotFound
