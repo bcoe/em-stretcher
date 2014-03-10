@@ -30,4 +30,26 @@ describe EventMachine::Stretcher::Server do
     end
   end
 
+  describe "mapping" do
+    it "can create a mapping" do
+
+    end
+  end
+
+  describe "index document" do
+    it "can index a document" do
+
+    end
+
+    it "can delete a document" do
+
+    end
+  end
+
+  describe "search" do
+    it "can retrieve an indexed document" do
+
+    end
+  end
+
 end
