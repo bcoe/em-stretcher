@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = EventMachine::Stretcher::VERSION
   spec.authors       = ["Benjamin Coe"]
   spec.email         = ["ben@yesware.com"]
-  spec.summary       = %q{EventMachine for Stretcher a Fast, Elegant, ElasticSearch client}
+  spec.summary       = %q{EventMachine for Stretcher; a Fast, Elegant, ElasticSearch client}
   spec.homepage      = ""
   spec.license       = "MIT"
 
