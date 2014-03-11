@@ -1,7 +1,10 @@
 Em::Stretcher
 =============
 
-An EventMachine port of [Stretcher](https://github.com/PoseBiz/stretcher) (a Fast, Elegant, ElasticSearch client.).
+An EventMachine port of [Stretcher](https://github.com/PoseBiz/stretcher) (a Fast, Elegant, ElasticSearch client.)
+
+Why?
+----
 
 Indexes
 -------
@@ -62,6 +65,70 @@ server.index('my-index')
 	end
 ```
 
+Indexing Documents
+------------------
+
+```ruby
+id = 33
+
+server.index('my-index')
+  .type(mapping_name)
+  .put(id, { title: "My Document with the id #{id}" })
+  .callback do |response|
+    p response
+  end
+  .errback do |err|
+  	p err
+  end
+```
+
+Searching for Documents
+-----------------------
+
+```ruby
+server.index('my-index').type('articles')
+	.search(size: 50, query: { "query_string" => { "query" => "*" } })
+	.documents
+	.callback do |r|
+		p r
+	end
+```
+
+When One Thing Leads to Another
+-------------------------------
+
+EM::Stretcher uses [Deferrable Gratification](https://github.com/samstokes/deferrable_gratification) for chaining together dependent requests.
+
+Here's a great example of when this comes into play:
+
+* You index several hundred documents in parallel.
+* You want to perform a search on the index, with all the documents present.
+
+Here's how you can pull this off with Deferrable Gratification:
+
+```
+# Index some documents in parallel.
+(0..50).each do |i|
+server.index('my-index')
+  .type('articles')
+  .put(i, { title: "title #{i}" })
+  .callback do |response|
+    p response
+  end
+end
+
+server.index('my-index').refresh
+	.bind! do
+	# Wait for indexing to finish.
+
+	  server.index('my-index').type('articles')
+	    .search(size: 50, query: { "query_string" => { "query" => "*" } })
+	    .documents
+	    .callback do |r|
+	      p r # all 50 results should have been returned.
+	    end
+	end
+```
 
 ## Installation
 
