@@ -142,10 +142,6 @@ Or install it yourself as:
 
     $ gem install em-stretcher
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Contributing
 
 1. Fork it ( http://github.com/bcoe/em-stretcher/fork )
