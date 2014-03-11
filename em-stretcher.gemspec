@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "faraday", "~> 0.8.5"
   spec.add_dependency "stretcher"
   spec.add_dependency "deferrable_gratification"
   spec.add_dependency "eventmachine"
