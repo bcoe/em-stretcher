@@ -3,9 +3,6 @@ Em::Stretcher
 
 An EventMachine port of [Stretcher](https://github.com/PoseBiz/stretcher) (a Fast, Elegant, ElasticSearch client.)
 
-Why?
-----
-
 Indexes
 -------
 
@@ -106,21 +103,22 @@ Here's a great example of when this comes into play:
 
 Here's how you can pull this off with Deferrable Gratification:
 
-```
+```ruby
 # Index some documents in parallel.
 (0..50).each do |i|
-server.index('my-index')
-  .type('articles')
-  .put(i, { title: "title #{i}" })
-  .callback do |response|
-    p response
-  end
+	server.index('my-index')
+	  .type('articles')
+	  .put(i, { title: "title #{i}" })
+	  .callback do |response|
+	    p response
+	  end
 end
 
+# First we wait for the indexing to finish.
 server.index('my-index').refresh
 	.bind! do
-	# Wait for indexing to finish.
 
+	  # Then we perform the search.
 	  server.index('my-index').type('articles')
 	    .search(size: 50, query: { "query_string" => { "query" => "*" } })
 	    .documents
